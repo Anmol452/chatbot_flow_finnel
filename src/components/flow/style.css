@@ -1,0 +1,33 @@
+html,
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+ 
+.react-flow {
+  width: 80vw !important ;
+  height: 80vh !important;
+}
+
+
+.bgwts{
+  background: url('/bgfors.png');
+  background-size: contain;
+  /* background-size: 50% 62%; */
+
+}
+
+.close_btn{
+  background: transparent;
+
+  :hover{
+    outline: none;
+  background: red;
+
+  }
+}
+
+
+.chattop{
+  background: #158D80;
+}

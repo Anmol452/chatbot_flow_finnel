@@ -1,0 +1,23 @@
+.chatview {
+    text-align: left;
+    box-shadow:  0px 0px 0.8px 0px ;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.chatview p {
+    padding-left: 5px;
+}
+
+
+
+.btntextprivew{
+    box-shadow: 0px 0px 0.8px 0px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    color: #5889f1;
+    padding: 9px;
+    margin-top: 8px;
+    background-color: #fff;
+}

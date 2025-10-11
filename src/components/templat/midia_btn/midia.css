@@ -1,0 +1,158 @@
+.img {
+  padding: 0;
+  margin: 0;
+  display: inline;
+  padding: 5px;
+  height: 28px;
+  margin-left: 2px;
+}
+
+.h4 {
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+
+.head-text {
+  text-align: left;
+  border-left: solid 9px;
+  background: rgb(233, 237, 239);
+  color: rgb(0, 128, 105);
+  border-radius: 8px;
+}
+
+.it{
+  margin-top: 2px !important;
+}
+
+
+
+
+.bodystyle {
+  border-radius: 8px;
+  padding: 4px;
+  background: rgb(234, 230, 223);
+  margin-top: 6px;
+}
+
+.jss1075 {
+  color: #54656f;
+  margin: 4px 0px;
+  padding: 0px 4px;
+  font-size: 12px;
+}
+
+.jss2 {
+  width: 70%;
+  display: inline-block;
+  text-align: left;
+}
+
+.input-this {
+  margin-top: 5px;
+  background: #fff;
+
+  font-size: 12px;
+}
+
+.w-\[220px\] {
+  width: 240px;
+}
+
+.span_btn2 {
+  width: 24%;
+  top: 2px;
+  display: inline-block;
+  position: relative;
+}
+
+.btndelete {
+  grid-area: b;
+  background: transparent;
+  padding: 0.6em 0.6em;
+}
+
+.copybtn {
+  grid-area: a;
+  padding: 0.6em 0.6em;
+  background: transparent;
+}
+
+.viewbtn {
+  padding: 0.4em;
+  background-color: transparent;
+}
+
+button:hover {
+  background-color: rgb(200, 226, 243);
+}
+
+.sidebox {
+  box-shadow: 0 0 6px 1px #c7c7c7;
+  background: #fff;
+  display: grid;
+  width: 33px;
+  left: -22px;
+  top: 52px;
+  height: 81px;
+  position: absolute;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "p"
+    "e";
+}
+
+.p1 {
+  grid-area: p;
+}
+
+.e1 {
+  grid-area: e;
+}
+
+
+.btnupbox {
+  box-shadow: 0 0 6px 1px #c7c7c7;
+  display: grid;
+  position: absolute;
+  border-radius: 6px;
+  top: -22px;
+  right: 17px;
+  background: #fff;
+  border: none;
+  width: 63px;
+  height: 36px;
+  cursor: pointer;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "a b";
+}
+
+.con {
+  display: inline-block;
+  color: green;
+  padding: 10px;
+}
+
+.last-btn {
+  background: rgb(233, 237, 239);
+  border-radius: 3px;
+}
+
+.text-hender{
+      top: -4px;
+    display: inline-block;
+    position: relative;
+    left: 45px;
+}
+
+.daymic {
+    left: -13px;
+}
+
+.meindev{
+  margin-bottom: -12px !important;
+}
