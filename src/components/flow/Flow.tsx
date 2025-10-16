@@ -23,6 +23,13 @@ import { Flow_start } from "../templat/flow_start/Flow_start";
 import Sms from "./chatpreview/Sms";
 import Btn from "./chatpreview/Btn";
 import type { TemplateData } from "../schema/TemplateData";
+import Imgchaet from "./chatpreview/Imgchaet";
+import TagInput from "../templat/flow_start/TagInput";
+import Listtem from "./chatpreview/Listtem";
+import WhatsappForms from "../templat/WhatsappForms/WhatsappForms";
+import Multe_product from "../templat/multe_product/Multe_product";
+import Catelogue from "../templat/catelogue/Catelogue";
+import Single_product from "../templat/Single_product/Single_product";
 // import {TemplateNodedata} from '../schema/TemplateData'
 
 const nodeDefaults = {
@@ -56,7 +63,7 @@ const initialNodes: Node<TemplateData>[] = [
       data: {},                        // ✅ required
       position: { x: 100, y: 200 },    // ✅ required
       onDelete: (id) => console.log("delete", id),  // ✅ required
-      onChange: (id, newData) => console.log("change", id, newData), // optional
+
     },
   },
 
@@ -77,8 +84,13 @@ const nodeTypes: NodeTypes = {
   Flow_start: Flow_start as any,
   Input_buttion: Input_buttion as any,
   Midia_btn: Midia_btn as any,
-  list: List as any,
-  TemplateNode: TemplateNode as any
+  List: List as any,
+  TemplateNode: TemplateNode as any,
+  TagInput: TagInput as any,
+  WhatsappForms: WhatsappForms as any,
+  Multe_product: Multe_product as any,
+  Catelogue: Catelogue as any,
+  Single_product: Single_product as any,
 };
 
 
@@ -91,6 +103,31 @@ const Flow = () => {
   const [components, setComponents] = useState<React.ReactNode[]>([]);
   // console.log("nodes =", nodes);
 
+  // ✅ This function will be passed to each node as data.onChange
+  const handleNodeDataChange = useCallback(
+    (id: string, newData: any) => {
+      setNodes((nds) =>
+        nds.map((node) =>
+          node.id === id
+            ? {
+              ...node,
+              data: {
+                ...node.data,
+                ...newData,
+                onChange: handleNodeDataChange, // preserve the callback itself
+              },
+            }
+            : node
+        )
+      );
+    },
+    [setNodes]
+  );
+
+  useEffect(() => {
+    console.log("🧩 Current Flow Snapshot:");
+    console.log(JSON.stringify({ nodes, edges }, null, 2));
+  }, [nodes, edges]); // ← हर बार update पर चलेगा
 
 
   //_____________________________________chat preview____________________________________________
@@ -98,6 +135,7 @@ const Flow = () => {
     setSelectedNode(node);
     setOpenChat(true);
   }, [])
+
 
   const closeChat = () => {
     setOpenChat(false);
@@ -225,7 +263,9 @@ const Flow = () => {
           label,
           variant,
           onDelete: handleDelete,
-          onChange: handleNodeChange,
+          onCopy: handleCopy,
+          // onChange: handleNodeChange,
+          onChange: handleNodeDataChange,
           onPreviewClick: () =>
             openChatPreview({
               id,
@@ -260,6 +300,50 @@ const Flow = () => {
     [setNodes, handleDelete, handleNodeChange, openChatPreview]
   );
 
+
+const handleCopy = useCallback(
+  (nodeType: string, label: string, variant: string) => {
+    const id = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+
+    const position = {
+      x: Math.random() * 400 + 100, // Random position (ya last node ke near)
+      y: Math.random() * 400 + 100,
+    };
+
+    const newNode: Node<TemplateData> = {
+      id,
+      type: nodeType,
+      position,
+      data: {
+        id,
+        title: "",
+        description: "Default description",
+        label,
+        variant,
+        onDelete: handleDelete,
+        onCopy: handleCopy,
+        onChange: handleNodeDataChange,
+        onPreviewClick: () =>
+          openChatPreview({
+            id,
+            type: nodeType,
+            position,
+            data: {
+              id,
+              title: "",
+              label,
+              variant,
+            },
+          } as Node),
+        data: {},
+        position,
+      },
+    };
+
+    setNodes((nds) => [...nds, newNode]);
+  },
+  [setNodes, handleDelete, handleNodeDataChange, openChatPreview]
+);
 
 
 
@@ -320,6 +404,60 @@ const Flow = () => {
         newComponents.push(<Sms textsms={titleValue} />);
       }
 
+      if (selectedNode?.data?.Listheader || selectedNode?.data?.Listbody || selectedNode?.data?.ListFooter) {
+        const Listheader =
+          typeof selectedNode.data.Listheader === "string"
+            ? selectedNode.data.Listheader
+            : JSON.stringify(selectedNode.data.Listheader); // object हो तो stringify कर दो
+        
+                 const Listbody =
+          typeof selectedNode.data.Listbody === "string"
+            ? selectedNode.data.Listbody
+            : JSON.stringify(selectedNode.data.Listbody);
+
+                 const Listfooter =
+          typeof selectedNode.data.Listfooter === "string"
+            ? selectedNode.data.Listfooter
+            : JSON.stringify(selectedNode.data.Listfooter);
+          
+        newComponents.push(<Listtem Listheader={Listheader} Listbody={Listbody} Listfooter={Listfooter}/>);
+      }
+
+       if (selectedNode?.data?.urldata) {
+        const titleValue =
+          typeof selectedNode.data.urldata === "string"
+            ? selectedNode.data.urldata
+            : JSON.stringify(selectedNode.data.urldata); // object हो तो stringify कर दो
+
+        newComponents.push(<Sms colors="blue" textsms={titleValue} />);
+      }
+
+
+        if (selectedNode?.data?.fileupload) {
+        const fileDataValue =
+          typeof selectedNode.data.fileupload === "string" ||
+            selectedNode.data.fileupload === null ||
+            typeof selectedNode.data.fileupload === "undefined"
+            ? selectedNode.data.fileupload
+            : undefined;
+        newComponents.push(
+          <Imgchaet fileData={fileDataValue} />
+        );
+      }
+
+      if (selectedNode?.data?.caption) {
+        const titleValue =
+          typeof selectedNode.data.caption === "string"
+            ? selectedNode.data.caption
+            : JSON.stringify(selectedNode.data.caption); // object हो तो stringify कर दो
+
+        newComponents.push(<Sms textsms={titleValue} />);
+      }
+
+
+     
+
+
       if (selectedNode?.data?.btntitle0) {
         const btnText =
           typeof selectedNode.data.btntitle0 === "string"
@@ -340,7 +478,7 @@ const Flow = () => {
       }
 
 
-        if (selectedNode?.data?.btntitle2) {
+      if (selectedNode?.data?.btntitle2) {
         const btnText =
           typeof selectedNode.data.btntitle2 === "string"
             ? selectedNode.data.btntitle2
@@ -348,6 +486,13 @@ const Flow = () => {
 
         newComponents.push(<Btn btntext={btnText} />);
       }
+
+
+    
+
+      console.log("data :", selectedNode?.data);
+
+      // if{selectedNode?.data?.}
 
       // if (selectedNode.data.showEmail) {
       // newComponents.push(<Email subject={selectedNode.data.title} key="email" />);
@@ -371,7 +516,10 @@ const Flow = () => {
       <ReactFlowProvider>
         <ReactFlow
           // key={JSON.stringify(nodeTypes)}
-          nodes={nodes}
+          nodes={nodes.map((n) => ({
+            ...n,
+            data: { ...n.data, onChange: handleNodeDataChange },
+          }))}
           // nodes={nodesWithHandler}
           //  nodes={nodes}
           edges={edges}

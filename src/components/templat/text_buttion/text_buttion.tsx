@@ -2,7 +2,7 @@ import { Handle, Position } from "@xyflow/react";
 import type { NodeProps } from "@xyflow/react";
 import type { TemplateData } from "../../schema/TemplateData";
 import './text.css'
-import { Switch } from "@mui/material";
+import { FormHelperText, Switch } from "@mui/material";
 import * as React from 'react';
 import { Trash, Copy, CircleX, EyeIcon, Plus } from "lucide-react";
 
@@ -63,7 +63,7 @@ export const Input_buttion: React.FC<NodeProps<TemplateData>> = ({ id, data }) =
 
     // Count calculate karo (jitne btntitle keys hain)
     const [inputCount, setInputCount] = React.useState<number>(
-        Object.keys(nodeData).filter((key) => key.startsWith("btntitle")).length || 1
+        Object.keys(nodeData).filter((key) => key.startsWith("btntitle")).length || 0
     );
 
     // ✅ Add new button field
@@ -77,24 +77,62 @@ export const Input_buttion: React.FC<NodeProps<TemplateData>> = ({ id, data }) =
     };
 
     // ✅ Delete button field (value bhi clear ho)
-    const handleDelete = (index: number): void => {
-        const newData: TemplateData = { ...nodeData };
+//   const handleDelete = (index: number): void => {
+//   // Copy old data
+//   const newData: TemplateData = { ...nodeData };
 
-        // current index hatao
-        delete newData[`btntitle${index}`];
+//   // 1️⃣ Remove the key at the current index
+//   delete newData[`btntitle${index}`];
 
-        // baaki shift karo (btntitle3 → btntitle2)
-        for (let i = index + 1; i < inputCount; i++) {
-            // newData[i] = newData[i+1];
-            newData[`btntitle${i - 1}`] = newData[`btntitle${i}`];
-            delete newData[`btntitle${i}`];
-        }
-        //  newData.length =  newData.length - 1;
-        //    data.length = data.length - 1
-        // update nodeData
-        nodeData.onChange?.(id, newData);
-        setInputCount((prev) => prev - 1);
-    };
+//   // 2️⃣ Shift remaining keys down
+//   for (let i = index + 1; i < inputCount; i++) {
+//     newData[`btntitle${i - 1}`] = newData[`btntitle${i}`];
+//     delete newData[`btntitle${i}`];
+//   }
+
+//   // 3️⃣ Update React Flow node data (trigger re-render)
+//   nodeData.onChange?.(id, { ...newData });
+
+//   // 4️⃣ Update input count
+//   setInputCount((prev) => prev - 1);
+// };
+
+
+const handleDelete = (index: number): void => {
+  // 1️⃣ Get all keys from nodeData
+  const keys = Object.keys(nodeData).filter((key) => key.startsWith("btntitle"));
+
+  // 2️⃣ Build new data object
+  const newData: TemplateData = {
+    label: nodeData.label,
+    id: nodeData.id,
+    data: nodeData.data,
+    position: nodeData.position,
+    onDelete: nodeData.onDelete,
+    // Copy any other required fields from nodeData if needed
+  };
+
+  keys.forEach((key) => {
+    const keyIndex = parseInt(key.replace("btntitle", ""));
+    if (keyIndex < index) {
+      // Copy keys before deleted index
+      newData[`btntitle${keyIndex}`] = nodeData[key];
+    } else if (keyIndex > index) {
+      // Shift keys after deleted index
+      newData[`btntitle${keyIndex - 1}`] = nodeData[key];
+    }
+    // skip keyIndex === index (deleted one)
+  });
+
+  // 3️⃣ Update React Flow node data immutably
+  nodeData.onChange?.(id, newData);
+
+  // 4️⃣ Update input count
+  setInputCount((prev) => prev - 1);
+};
+
+
+
 
     // ✅ Universal change (puri typing support)
     const handleChangenode = (index: number, value: string) => {
@@ -110,7 +148,10 @@ export const Input_buttion: React.FC<NodeProps<TemplateData>> = ({ id, data }) =
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
-        nodeData.onChange?.(id, { [name]: value });
+        nodeData.onChange?.(id, { 
+            ...nodeData,
+            [name]: value 
+        });
     };
 
 
@@ -167,7 +208,7 @@ export const Input_buttion: React.FC<NodeProps<TemplateData>> = ({ id, data }) =
                                 // onClick={() => data.onCopy(id)}
                                 onClick={() => {
                                     if (typeof data.onCopy === "function") {
-                                        data.onCopy(id);
+                                        data.onCopy("Input_buttion");
                                     }
                                 }}
                                 className="copybtn"
@@ -194,8 +235,7 @@ export const Input_buttion: React.FC<NodeProps<TemplateData>> = ({ id, data }) =
 
 
                             <button
-                                // onClick={void (data.onPreviewClick)}
-                                // onClick={() => data.onPreviewClick()}
+                              
                                 onClick={() => {
                                     if (typeof data.onPreviewClick === "function") {
                                         data.onPreviewClick(id);
@@ -214,23 +254,24 @@ export const Input_buttion: React.FC<NodeProps<TemplateData>> = ({ id, data }) =
                 {/* <Handle type="source" position={Position.Right} /> */}
                 <div className="head-text"><img className="img" src="/messiage.png" alt="" /> <h4 className="h4">Message</h4> </div>
 
-                <div className="text-hender">
-                    <Handle
-                        type="target"
-                        position={Position.Left}
-                        id="flow_start"
-                        style={{
-                            display: "inline-block",
-                            right: "45px",
-                            top: "149px",
-                            width: "18px",
-                            height: "435px",
-                            background: "transparent",
-                            border: "transparent"
-                        }}
-                    />
-                </div>
+
                 <div className="bodystyle border border-red-600 ">
+                    <div className="text-hender">
+                        <Handle
+                            type="target"
+                            position={Position.Left}
+                            id="flow_start"
+                            style={{
+                                display: "inline-block",
+                                right: "45px",
+                                top: "149px",
+                                width: "18px",
+                                height: "435px",
+                                background: "transparent",
+                                border: "transparent"
+                            }}
+                        />
+                    </div>
                     {/* <p className="jss1075 text-left">Type, press enter to add keyword</p> */}
                     <form action="" id="form_id">
 
@@ -261,10 +302,10 @@ export const Input_buttion: React.FC<NodeProps<TemplateData>> = ({ id, data }) =
                                     // value={String(nodeData[`btntitle${i}`] || "")}
                                     onChange={(e) => handleChangenode(i, e.target.value)}
                                     placeholder={`Enter text ${i + 1}`}
-                                    className="w-full p-2 border rounded mb-2 input-this text-gray-600 h-20 text-left"
+                                     className="w-full p-2 border outline-2 outline-red-500/100 rounded  input-this it text-gray-600 h-20 text-center"
                                 />
 
-                                <div className="text-hender daymic">
+                                <div className="box-source-input">
                                     <Handle
                                         type="source"
                                         position={Position.Top}
@@ -279,6 +320,9 @@ export const Input_buttion: React.FC<NodeProps<TemplateData>> = ({ id, data }) =
                                         }}
                                     />
                                 </div>
+                                <FormHelperText style={{ marginLeft: "auto", fontSize: "10px", textAlign: "right", position: "relative", top: "-27px", right: "3px" }}>
+                                     {(nodeData[`btntitle${i}`]?.length || 0)}/20
+                                </FormHelperText>
                             </div>
                         ))}
 

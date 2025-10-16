@@ -1,11 +1,11 @@
 import { Handle, Position } from "@xyflow/react";
+// import { useCallback } from "react";
 import type { NodeProps } from "@xyflow/react";
 import type { TemplateData } from "../../schema/TemplateData";
-import './midia.css'
+import './whatsappForms.css'
 import { FormHelperText, Switch, TextField } from "@mui/material";
 import * as React from 'react';
 import { Trash, Copy, CircleX, EyeIcon, Plus } from "lucide-react";
-import UploadMedia from "./UploadMedia";
 
 
 const label = {
@@ -18,91 +18,19 @@ const label = {
 
 
 
-function Midia_btn({ id, data }: NodeProps<TemplateData>) {
+function WhatsappForms({ id, data }: NodeProps<TemplateData>) {
 
     const [hover, setHover] = React.useState(false);
     const [inputCount, setInputCount] = React.useState<number>(0);
     const [btndisble, setBtndisble] = React.useState<boolean>(false);
     const [switchbtn, setSwitchbtn] = React.useState<boolean>(false);
     const [caption, setCaption] = React.useState<string>("");
-    // const [nodes, setNodes] = React.useState<any>(data); // 🧠 React Flow nodes state
+
     console.log(setCaption);
-
-
-
-    React.useEffect(() => {
-        if (inputCount === 3) {
-            setBtndisble(true);
-        } else {
-            setBtndisble(false);
-        }
-    }, [inputCount]);
 
     const nodeData = data as TemplateData; // ✅ TypeScript को बताया कि ये TemplateData है
 
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     nodeData.onChange?.(id, { ...nodeData, title: e.target.value });
-    // };
 
-
-
-
-
-    // 🧠 Agar text ya JSON file ho to as text padho
-
-
-    const funSwitchbtn = () => {
-        if (switchbtn === false) {
-            setSwitchbtn(true);
-        } else {
-            setSwitchbtn(false);
-        }
-    }
-
-    const handleDelete = (index: number): void => {
-        // 1️⃣ Get all keys from nodeData
-        const keys = Object.keys(nodeData).filter((key) => key.startsWith("btntitle"));
-
-        // 2️⃣ Build new data object
-        const newData: TemplateData = {
-            label: nodeData.label,
-            id: nodeData.id,
-            data: nodeData.data,
-            position: nodeData.position,
-            onDelete: nodeData.onDelete,
-            // Copy any other required fields from nodeData if needed
-        };
-
-        keys.forEach((key) => {
-            const keyIndex = parseInt(key.replace("btntitle", ""));
-            if (keyIndex < index) {
-                // Copy keys before deleted index
-                newData[`btntitle${keyIndex}`] = nodeData[key];
-            } else if (keyIndex > index) {
-                // Shift keys after deleted index
-                newData[`btntitle${keyIndex - 1}`] = nodeData[key];
-            }
-            // skip keyIndex === index (deleted one)
-        });
-
-        // 3️⃣ Update React Flow node data immutably
-        nodeData.onChange?.(id, newData);
-
-        // 4️⃣ Update input count
-        setInputCount((prev) => prev - 1);
-    };
-
-
-
-
-    // ✅ Universal change (puri typing support)
-    const handleChangenode = (index: number, value: string) => {
-        const key = `btntitle${index}`;
-        nodeData.onChange?.(id, {
-            ...nodeData, // old data rakho
-            [key]: value,
-        });
-    };
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -114,8 +42,33 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
         });
     };
 
+    React.useEffect(() => {
+        if (inputCount === 3) {
+            setBtndisble(true);
+        } else {
+            setBtndisble(false);
+        }
+    }, [inputCount]);
 
 
+    // const onImageChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = e.target.files?.[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onload = () => {
+    //             data.onChange(id, { ...data, image: reader.result });
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // }, [data, id]);
+
+    const funSwitchbtn = () => {
+        if (switchbtn === false) {
+            setSwitchbtn(true);
+        } else {
+            setSwitchbtn(false);
+        }
+    }
 
 
 
@@ -131,20 +84,21 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                     id="flow_start"
                     style={{
                         display: "inline-block",
-                        right: "245px",
-                        top: "352px",
-                        width: "13px",
-                        height: "694px",
+                        right: "262px",
+                        top: "300px",
+                        width: "7px",
+                        height: "577px",
                         background: "transparent",
                         borderRadius: "0",
-                        outline: "none"
+                        left: "-6px"
                     }}
                 />
             </div>
 
-
             <div className="p-3 rounded-xl shadow bg-white border w-[220px] hover:border hover:border-green-600" onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)} style={{ display: "block" }}>
+
+
 
 
 
@@ -153,6 +107,7 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                         <div className="btnupbox sp">
 
                             <button
+                                // onClick={() => data.onDelete(id)}
                                 onClick={() => {
                                     if (typeof data.onDelete === "function") {
                                         data.onDelete(id);
@@ -167,7 +122,7 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                                 // onClick={() => data.onCopy(id)}
                                 onClick={() => {
                                     if (typeof data.onCopy === "function") {
-                                        data.onCopy("Midia_btn");
+                                        data.onCopy("List");
                                     }
                                 }}
                                 className="copybtn"
@@ -194,14 +149,11 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
 
 
                             <button
-                                // onClick={void (data.onPreviewClick)}
-                                // onClick={() => data.onPreviewClick()}
                                 onClick={() => {
                                     if (typeof data.onPreviewClick === "function") {
                                         data.onPreviewClick(id);
                                     }
                                 }}
-
                                 className="viewbtn e1"
                             >
                                 <EyeIcon className="size-4" />
@@ -211,23 +163,68 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
 
                     </>
                 )}
+
+
+
                 {/* <Handle type="source" position={Position.Right} /> */}
-                <div className="head-text"><img className="img" src="/messiage.png" alt="" /> <h4 className="h4">Message</h4> </div>
+                <div className="head-text"><img className="img" src="/messiage.png" alt="" /> <h4 className="h4">Whatsapp Forms</h4> </div>
 
 
                 <div className="bodystyle border border-red-600 ">
                     {/* <p className="jss1075 text-left">Type, press enter to add keyword</p> */}
                     <form action="" id="media_form_id">
 
-                        <p className="jss1075 text-left">Select media type</p>
+                        <p className="jss1075 text-left">Whatsapp Flow ID</p>
+
+                        <input
+                            type="text"
+                            id="btntitleid"
+                            name="formid"
+                            value={String(nodeData.formid || "")}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded mb-2 input-this"
+                            placeholder="Type id..."
+                        />
+
+
+                        <p className="jss1075 text-left">Whatsapp Flow Token</p>
+
+                        <input
+                            type="text"
+                            id="btntitleid"
+                            name="formToken"
+                            value={String(nodeData.formToken || "")}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded mb-2 input-this"
+                            placeholder="Type token..."
+                        />
+
+
+                        <p className="jss1075 text-left">First Screen Name</p>
+
+                        <input
+                            type="texxt"
+                            id="btntitleid"
+                            name="screenName"
+                            value={String(nodeData.screenName || "")}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded mb-2 input-this"
+                            placeholder="Screen Name"
+                        />
+
+
+                        <p className="jss1075 text-left">Select Flow Status</p>
 
                         <select
-                            name="Type_delay"
+                            name="Status"
                             id="Media-Type"
                             value={String(data.option || "")}
                             className="w-full p-2 border rounded mb-2 input-this "
 
                         >
+                            <option value="" disabled>
+                                Select Status
+                            </option>
                             <option value="image">IMAGE</option>
                             <option value="video" >VIDEO</option>
                             <option value="audio">AUDIO</option>
@@ -235,76 +232,63 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                         </select>
 
 
-                        <p className="jss1075 text-left">Enter or paste url</p>
-
-                        <input
-                            type="url"
-
-                            id="btntitleid"
-                            name="urldata"
-                            value={String(nodeData.urldata || "")}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded mb-2 input-this"
-                            placeholder="Type URL..."
-                        />
-
-
-
-
-
-
-
                         <div
-                            style={{
-                                borderTopLeftRadius: "8px",
-                                borderTopRightRadius: "8px",
-                                width: "100%",
-                                height: "150px",
-                                backgroundColor: "white",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                fontSize: "12px",
-                                overflow: "hidden",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    fontSize: "12px",
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    gap: "5px",
-                                }}
-                            >
-
-                                {/* Clickable area to trigger file input */}
-
-                                <UploadMedia id={id} data={data} />
-
-
-
-                            </div>
-                        </div>
-
-
-
-                        <div
-                            className="mb-2"
+                            className=""
                             style={{
                                 backgroundColor: "white",
                                 borderTop: "1px solid rgb(234, 230, 223)",
                                 borderRadius: "0px 0px 8px 8px",
                             }}
                         >
+
                             <TextField
                                 fullWidth
                                 multiline
                                 maxRows={10}
-                                placeholder="Caption..."
-                                name="caption"
-                                value={String(nodeData.caption || "")}
+                                placeholder="Header"
+                                name="Listheader"
+                                value={String(nodeData.Listheader || "")}
+                                onChange={handleChange}
+                                inputProps={{ maxLength: 20, style: { textAlign: "left" } }}
+                                variant="outlined" // 👈 yahan standard ki jagah outlined rakho
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "& fieldset": {
+                                            border: "none", // 👈 border remove (flat look)
+                                        },
+                                        "&:hover fieldset": {
+                                            border: "none",
+                                        },
+                                        "&.Mui-focused fieldset": {
+                                            border: "none",
+                                        },
+                                    },
+                                }}
+                            />
+
+                            <FormHelperText style={{ marginLeft: "auto", fontSize: "10px", textAlign: "right" }}>
+                                {caption.length}/20
+                            </FormHelperText>
+                        </div>
+
+
+
+                        <div
+                            className=""
+                            style={{
+                                backgroundColor: "white",
+                                borderTop: "1px solid rgb(234, 230, 223)",
+                                borderRadius: "0px 0px 8px 8px",
+                            }}
+                        >
+
+                            <TextField
+                                fullWidth
+                                multiline
+                                maxRows={10}
+                                placeholder="body"
+                                name="Listbody"
+                                value={String(nodeData.Listbody || "")}
                                 onChange={handleChange}
                                 inputProps={{ maxLength: 1024, style: { textAlign: "left" } }}
                                 variant="outlined" // 👈 yahan standard ki jagah outlined rakho
@@ -322,10 +306,86 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                                     },
                                 }}
                             />
+
                             <FormHelperText style={{ marginLeft: "auto", fontSize: "10px", textAlign: "right" }}>
                                 {caption.length}/1024
                             </FormHelperText>
                         </div>
+
+
+                        <div
+                            className="mb-2"
+                            style={{
+                                backgroundColor: "white",
+                                borderTop: "1px solid rgb(234, 230, 223)",
+                                borderRadius: "0px 0px 8px 8px",
+                            }}
+                        >
+
+                            <TextField
+                                fullWidth
+                                multiline
+                                maxRows={10}
+                                placeholder="footer"
+                                name="Listfooter"
+                                value={String(nodeData.Listfooter || "")}
+                                onChange={handleChange}
+                                inputProps={{ maxLength: 1024, style: { textAlign: "left" } }}
+                                variant="outlined" // 👈 yahan standard ki jagah outlined rakho
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "& fieldset": {
+                                            border: "none", // 👈 border remove (flat look)
+                                        },
+                                        "&:hover fieldset": {
+                                            border: "none",
+                                        },
+                                        "&.Mui-focused fieldset": {
+                                            border: "none",
+                                        },
+                                    },
+                                }}
+                            />
+
+                            <FormHelperText style={{ marginLeft: "auto", fontSize: "10px", textAlign: "right" }}>
+                                {caption.length}/60
+                            </FormHelperText>
+                        </div>
+
+                        <p className="jss1075 text-left">Select Attribute to pass custom data inside form</p>
+
+                        <select
+                            name="Status"
+                            id="Media-Type"
+                            value={String(data.option || "")}
+                            className="w-full p-2 border rounded mb-2 input-this "
+
+                        >
+                            <option value="" disabled>
+                                $ Select attribute
+                            </option>
+                            <option value="image">IMAGE</option>
+                            <option value="video" >VIDEO</option>
+                            <option value="audio">AUDIO</option>
+                            <option value="file">FILE</option>
+                        </select>
+
+                        {/* <p className="jss1075 text-left">Select media type</p> */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -334,27 +394,30 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
 
 
                         {Array.from({ length: inputCount }, (_, i) => (
-                            <div key={i}>
-                                <div className="relative">
-                                    <CircleX
-                                        className="size-3 absolute"
-                                        onClick={() => handleDelete(i)}
-                                    />
+
+                            <div className="meindev">
+                                <div className="d">
+                                    <CircleX className="size-3 absolute" onClick={() => setInputCount(prev => prev - 1)} />
                                 </div>
 
+
                                 <input
-                                    name={`btntitle${i}`}
-                                    value={String(nodeData[`btntitle${i}`] || "")}
-                                    id={`btntitleid${i}`}
-                                    // value={String(nodeData[`btntitle${i}`] || "")}
-                                    onChange={(e) => handleChangenode(i, e.target.value)}
+                                    key={i}
+                                    name={`title${i}`}
+                                    id={`title2${i}`}
+                                    value={String(data[`title${i}`] || "")}
+                                    onChange={handleChange}
+                                    // onChange={(e) => data.onChange(id, { [`title${i}`]: e.target.value })}
                                     placeholder={`Enter text ${i + 1}`}
-                                    className="w-full p-2 border outline-2 outline-red-500/100 rounded  input-this it text-gray-600 h-20 text-center"
+                                    className="w-full p-2 border outline-2 outline-red-500/100 rounded  input-this it text-gray-600 h-20 text-left"
                                 />
 
-                                <div className="box-source-input">
+
+
+                                <div className="text-hender daymic">
                                     <Handle
                                         type="source"
+                                        // className="my-custom-handle"
                                         position={Position.Top}
                                         id={`daynic-${i}`}
                                         style={{
@@ -367,10 +430,24 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                                         }}
                                     />
                                 </div>
+
+
                                 <FormHelperText style={{ marginLeft: "auto", fontSize: "10px", textAlign: "right", position: "relative", top: "-27px", right: "3px" }}>
-                                    {(nodeData[`btntitle${i}`]?.length || 0)}/20
+                                    {caption.length}/24
+
                                 </FormHelperText>
+
+                                <input
+                                    type="button"
+                                    name="Add_button"
+                                    id="Add_button"
+                                    value="+ Add Section"
+                                    onClick={() => setInputCount(prev => prev + 1)}
+                                    className="w-full p-2 border rounded input-this text-center text-stone-900"
+                                    disabled={btndisble}
+                                />
                             </div>
+
                         ))}
 
 
@@ -381,10 +458,8 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                             type="button"
                             name="Add_button"
                             id="Add_button"
-                            value="+ Add button"
-                            onClick={() => setInputCount(prev => prev + 1)}
-                            className="w-full p-2 border rounded input-this text-center text-stone-900"
-                            disabled={btndisble}
+                            value="Botton Title"
+                            className="w-full p-2 border rounded input-this text-center text-blue-400"
                         />
 
 
@@ -407,10 +482,6 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                         <p className="jss1075 jss2">Set Timeout</p><span className="span_btn2"><Switch name="notifications"  {...label} onClick={funSwitchbtn} /></span>
 
 
-
-
-
-
                         {switchbtn ? (
                             <div>
 
@@ -420,8 +491,7 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                                     value={String(data["time"] || "")}
                                     onChange={handleChange}
                                     placeholder="Enter set time"
-                                    className="w-full p-2 border rounded mb-2 
-                                               input-this text-gray-600 h-20 text-left"
+                                    className="w-full p-2 border rounded mb-2 input-this text-gray-600 h-20 text-left"
                                 />
 
                                 <input
@@ -434,15 +504,17 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                                     disabled={btndisble}
                                 />
                             </div>
-
-
                         ) : null}
+
+
+
+
+
 
 
                         {typeof data.image === "string" && data.image && (
                             <img src={data.image} alt="uploaded" className="w-full h-24 object-cover rounded" />
                         )}
-
 
 
                     </form>
@@ -481,6 +553,25 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
                     </div>
                 </div>
 
+
+                {/* <Handle
+                    type="target"
+                    position={Position.Left}
+                    id="target1"
+                    style={{
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        // background: "#fff",
+                        // border: "2px solid green",
+                        width: "10px",
+                        height: "10px",
+                    }}
+                /> */}
+
+
+
+
+
             </div>
 
 
@@ -493,4 +584,5 @@ function Midia_btn({ id, data }: NodeProps<TemplateData>) {
 
 
 
-export default Midia_btn
+
+export default WhatsappForms

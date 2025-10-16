@@ -11,7 +11,7 @@ const components = [
     },
     {
         id: `${Date.now()}-${Math.floor(Math.random() * 10000)}`,
-        name: "Image",
+        name: "Media Buttions",
         type: "Midia_btn",
         // icon: <Image className="h-5 w-5" />,
         img: '/media.png',
@@ -26,37 +26,37 @@ const components = [
     },
     {
         id: `${Date.now()}-${Math.floor(Math.random() * 10000)}`,
-        name: "Form",
-        type: "form",
-        // icon: <FileText className="h-5 w-5" />,
+        name: "Whatsapp Forms",
+        type: "WhatsappForms",
+        img: '/wf.png',
         description: "Collect user information.",
     },
     {
        id: `${Date.now()}-${Math.floor(Math.random() * 10000)}`,
-        name: "List",
-        type: "list",
-        // icon: <List className="h-5 w-5" />,
+        name: "Catalogue Message",
+        type: "Catelogue",
+         img: '/cm.png',
         description: "Display a list of items.",
     },
     {
        id: `${Date.now()}-${Math.floor(Math.random() * 10000)}`,
-        name: "k",
-        type: "catalogue",
-        // icon: <BookMarked className="h-5 w-5" />,
+        name: "Single Product",
+        type: "Single_product",
+         img: '/sp.png',
         description: "Show a product catalogue.",
     },
     {
        id: `${Date.now()}-${Math.floor(Math.random() * 10000)}`,
-        name: "Product",
-        type: "product",
-        // icon: <Package className="h-5 w-5" />,
+        name: "Multi Product",
+        type: "Multe_product",
+         img: '/mp.png',
         description: "Feature a single product.",
     },
     {
        id: `${Date.now()}-${Math.floor(Math.random() * 10000)}`,
         name: "Template",
         type: "template",
-        // icon: <LayoutTemplate className="h-5 w-5" />,
+         img: '/tem.png',
         description: "Use a pre-defined template.",
     },
 ];
@@ -88,8 +88,8 @@ export default function Menu() {
                 {node.label}
             </div> */}
 
-            <aside className="w-65 h-55 border-r bg-card p-4 flex flex-col gap-4">
-                <h2 className="text-lg font-semibold font-headline">Components</h2>
+            <aside className="w-65 h-55 border-r bg-card p-4 flex flex-col gap-4" style={{height: '100vh'}}>
+                <h2 className="text-lg font-semibold font-headline text-left">Message types</h2><hr />
                 <ScrollArea className="flex-1 -mr-4">
                     <div className="grid grid-cols-2 gap-3 pr-4">
                         {components.map((component) => (

@@ -21,3 +21,12 @@
     margin-top: 8px;
     background-color: #fff;
 }
+
+
+.boxList{
+       text-align: left;
+    background: #fff;
+    width: 60%;
+    padding: 5px;
+    border-radius: 6px;
+}

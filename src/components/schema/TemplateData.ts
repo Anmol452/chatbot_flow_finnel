@@ -16,12 +16,30 @@ export interface TemplateData extends Record<string, unknown>  {
   type?: string;
   position: XYPosition;
   onDelete: (id: string) => void;
-  onChange?: (id: string, newData: any) => void;
+  onChange?: (id: string, newData: TemplateData) => void;
   handleDelete?: (id: string, newData: any) => void;
   Regex?: string;
   btntitle0?: string;
   btntitle1?: string;
   btntitle2?: string;
+  tags?: string[];
+  preview?: string | null;
+  fileName?: string;
+  fileType?: string;
+  imageFile?: File | null;
+  fileupload?: string | null;
+  url?: string | null;
+  fileId?: string;
+  dataimg?:  Record<string, unknown>;
+  fileData?: {
+    preview: string | null;
+    type: string | null;
+    name: string | null;
+  };
+  // ✅ corrected function prop names
+  
+  // onFileUpload?: (id: string, file: File) => void; // ✅ corrected
+  // onFileSelect?: (file: File) => void; // ✅ corrected
   // openChatPreview?: (id: string) => void; // ✅ corrected
   // onPreviewClick?: () => void;
   [key: string]: any; 

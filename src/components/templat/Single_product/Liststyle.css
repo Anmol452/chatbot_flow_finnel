@@ -150,9 +150,16 @@ button:hover {
 }
 
 .daymic {
-    left: 11px;
+    top: -4px;
+    display: inline-block;
+    position: relative;
+    left: 15px !important;
 }
 
 .meindev{
   margin-bottom: -12px !important;
+}
+
+.sp{
+  top: -14px !important;
 }
